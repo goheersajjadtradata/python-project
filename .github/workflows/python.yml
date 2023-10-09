@@ -16,7 +16,7 @@ jobs:
           host: 188.166.165.242
           username: root
           key: Welcome@023@W2a
-          script:
-            cd /root/python-project
-            git clone gtestit@github.com:goheersajjadtradata/python-project.git
+          script: |       
+            cd /python-project
+            git clone git@github.com:goheersajjadtradata/python-project.git
             echo 'Deployment to digital ocean finished'

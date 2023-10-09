@@ -1,0 +1,22 @@
+
+name: Deploy to DigitalOcean Droplet
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to DigitalOcean Droplet
+        uses: actions/checkout@v2
+
+        with:
+          host: 188.166.165.242
+          username: root
+          key: Welcome@023@W2a
+          script:
+            cd /root/python-project
+            git clone gtestit@github.com:goheersajjadtradata/python-project.git
+            echo 'Deployment to digital ocean finished'

@@ -1,4 +1,3 @@
-
 name: Deploy to DigitalOcean Droplet
 on:
   push:
@@ -9,11 +8,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Deploy to DigitalOcean Droplet
         uses: actions/checkout@v2
-
-      - name: Deploy DigitalOcean Droplet
-        uses: appleboy/ssh-action@v0.1.2
 
         with:
           host: 188.166.165.242

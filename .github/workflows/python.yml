@@ -7,8 +7,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-        - name: Checkout code
-          uses: actions/checkout@v2
+        - name: Deploy to DigitalOcean 
+          uses: appleboy/ssh-action@v1.0.0
          with:
           host: 188.166.165.242
           username: root
@@ -16,9 +16,8 @@ jobs:
           script: |
             rm -rf test
             mkdir test
-            cd test
-           git clone https://github.com/goheersajjadtradata/python-project.git
-           cd python-project
-           docker compose -f docker-compose.yml build
-           docker-compose -f docker-compose.yml up -d
-
+            git clone https://github.com/goheersajjadtradata/python-project.git
+            cd python-project
+            docker-compose -f docker-compose.yml build
+            docker-compose -f docker-compose.yml up -d
+             echo 'Deployment to digital ocean finished'

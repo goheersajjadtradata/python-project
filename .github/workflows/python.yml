@@ -1,4 +1,6 @@
-name: Deploy to DigitalOcean Droplet
+
+name: Deploy to DigitalOcean
+
 on:
   push:
     branches:
@@ -7,21 +9,26 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Deploy to DigitalOcean Droplet
+      - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Build Docker image
+        run: docker build -t pdf-text-data-extractor_pdf-text-data-extractor  .
+
+      - name: Log in to Docker Hub
+        run: docker login -u goheersajjad97 -p Transdata!@#
+
+      - name: Push Docker image to Docker Hub
+        run: docker push pdf-text-data-extractor_pdf-text-data-extractor 
+
+      - name: SSH into DigitalOcean droplet
+        uses: appleboy/ssh-action@v0.1.2
         with:
           host: 188.166.165.242
           username: root
           key: Welcome@023@W2a
           script: |
-            export NVM_DIR=~/.nvm
-            source ~/.nvm/nvm.sh
-            rm -rf test
-            mkdir test
-            cd test
-            git clone git@github.com:goheersajjadtradata/python-project.git
-            cd python-project
-            docker-compose -f docker-compose.yml build
+            docker pull pdf-text-data-extractor_pdf-text-data-extractor 
             docker-compose -f docker-compose.yml up -d
-            echo 'Deployment to digital ocean finished'

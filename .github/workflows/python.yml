@@ -22,13 +22,8 @@ jobs:
         docker-compose --version
       shell: bash
 
-    - name: Copy Docker Compose files to the Droplet
-      run: scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r docker-compose.yml root@188.166.165.242:/root/python-project/python-project
-      env:
-        SSH_PASSWORD: Welcome@023@W2a
-
     - name: SSH into the Droplet, pull the latest code, and deploy the application
       run: |
-        sshpass -p Welcome@023@W2a ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@188.166.165.242 "cd /root/python-project/python-project && git pull && docker-compose up -d"
+        sshpass -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@188.166.165.242 "cd /root/python-project/python-project && git pull && docker-compose up -d"
       env:
-        SSH_PASSWORD: Welcome@023@W2a
+        SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}

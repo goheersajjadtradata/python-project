@@ -1,4 +1,3 @@
-
 name: Deploy to DigitalOcean
 
 on:
@@ -11,24 +10,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v2
+      with:
+        ref: main # Change to the branch you want to deploy
 
-      - name: Build Docker image
-        run: docker build -t python-project
+    - name: Set up Docker Compose
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y docker.io docker-compose
+        docker-compose --version
+      shell: bash
 
-      - name: Log in to Docker Hub
-        run: docker login -u goheersajjad97 -p Transdata!@#
+    - name: Copy Docker Compose files to the Droplet
+      run: scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r docker-compose.yml root@188.166.165.242:/root/python-project/python-project
+      env:
+        SSH_PASSWORD: Welcome@023@W2a
 
-      - name: Push Docker image to Docker Hub
-        run: docker push python-project
-
-      - name: SSH into DigitalOcean droplet
-        uses: appleboy/ssh-action@v0.1.2
-        with:
-          host: 188.166.165.242
-          username: root
-          key: Welcome@023@W2a
-          script: |
-            docker pull python-project
-            docker-compose -f docker-compose.yml up -d
+    - name: SSH into the Droplet, pull the latest code, and deploy the application
+      run: |
+        sshpass -p Welcome@023@W2a ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@188.166.165.242 "cd /root/python-project/python-project && git pull && docker-compose up -d"
+      env:
+        SSH_PASSWORD: Welcome@023@W2a
